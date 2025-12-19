@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Edit Client: {{ client.first_name }}</h3>
+<form method="POST">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label>First Name</label>
+            <input type="text" name="first_name" class="form-control" value="{{ client.first_name }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Last Name</label>
+            <input type="text" name="last_name" class="form-control" value="{{ client.last_name }}" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label>Age</label>
+            <input type="number" name="age" class="form-control" value="{{ client.age }}" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Annual Income</label>
+            <input type="number" name="annual_income" class="form-control" value="{{ client.annual_income }}" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Marital Status</label>
+            <select name="marital_status" class="form-select">
+                <option value="Single" {% if client.marital_status == 'Single' %}selected{% endif %}>Single</option>
+                <option value="Married" {% if client.marital_status == 'Married' %}selected{% endif %}>Married</option>
+                <option value="Divorced" {% if client.marital_status == 'Divorced' %}selected{% endif %}>Divorced</option>
+                <option value="Widowed" {% if client.marital_status == 'Widowed' %}selected{% endif %}>Widowed</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Info</button>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-success text-white">
+        <h4>Purchase Policy for: {{ client.first_name }} {{ client.last_name }}</h4>
+    </div>
+    <div class="card-body">
+        <p>Current Recommendation: 
+            <span class="badge bg-info text-dark">
+                Check Client List
+            </span>
+        </p>
+        <p>Selecting a product below will generate a transaction and <strong>label this data</strong> for future AI training.</p>
+        
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Select Insurance Product</label>
+                <select name="product_name" class="form-select" size="4">
+                    <option value="Life">Life Insurance ($1500/yr)</option>
+                    <option value="FSA">FSA - Flexible Spending ($500/yr)</option>
+                    <option value="A&H">Accident & Health ($800/yr)</option>
+                    <option value="No_Insurance">No Insurance (Client Rejected)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg">Confirm Purchase</button>
+            <a href="/clients" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

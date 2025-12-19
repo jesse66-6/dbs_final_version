@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Add New Client & Generate AI Insight</h4>
+    </div>
+    <div class="card-body">
+        <p class="text-muted">
+            Enter client details below. The system will automatically save to the <strong>Operational Database (ODS)</strong> 
+            and trigger the <strong>XGBoost Model</strong> to predict the best insurance product.
+        </p>
+
+        <form method="POST" action="/clients/add">
+            
+            <h5 class="border-bottom pb-2 mb-3">1. Personal Information</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" required placeholder="e.g. John">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" required placeholder="e.g. Doe">
+                </div>
+            </div>
+
+            <h5 class="border-bottom pb-2 mb-3 mt-3">2. Demographics & Socio-Economic Data (ML Features)</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control" id="age" name="age" min="18" max="120" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="" disabled selected>Select...</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="marital_status" class="form-label">Marital Status</label>
+                    <select class="form-select" id="marital_status" name="marital_status" required>
+                        <option value="" disabled selected>Select...</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="education_level" class="form-label">Education Level</label>
+                    <select class="form-select" id="education_level" name="education_level" required>
+                        <option value="" disabled selected>Select...</option>
+                        <option value="High School">High School</option>
+                        <option value="Bachelor">Bachelor</option>
+                        <option value="Master">Master</option>
+                        <option value="PhD">PhD</option>
+                        <option value="Associate">Associate</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>                
+                <div class="col-md-4 mb-3">
+                    <label for="annual_income" class="form-label">Annual Income ($)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" id="annual_income" name="annual_income" min="0" step="1000" required>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="number_of_dependents" class="form-label">No. of Dependents</label>
+                    <input type="number" class="form-control" id="number_of_dependents" name="number_of_dependents" min="0" value="0" required>
+                </div>
+            </div>
+
+            <div class="alert alert-secondary mt-4">
+                <h5 class="alert-heading"><i class="bi bi-robot"></i> Model Training Feedback Loop (Optional)</h5>
+                <hr>
+                <div class="mb-3">
+                    <label for="actual_product_bought" class="form-label fw-bold">Actual Product Purchased (Ground Truth)</label>
+                    <select class="form-select border-info" id="actual_product_bought" name="actual_product_bought">
+                        <option value="" selected>-- Unknown (Run Prediction Only) --</option>
+                        <option value="No_Insurance">No Insurance</option>
+                        <option value="Life">Life Insurance</option>
+                        <option value="FSA">FSA (Flexible Spending Account)</option>
+                        <option value="A&H">A&H (Accident & Health)</option>
+                    </select>
+                    <div class="form-text text-dark">
+                        <strong>Note:</strong> If you select a product here, this record will be treated as "Ground Truth" and included in the next 
+                        <strong>Batch Retraining</strong> cycle to improve model accuracy. If left empty, the model will only provide a prediction.
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <a href="/clients" class="btn btn-secondary me-md-2">Cancel</a>
+                <button type="submit" class="btn btn-success btn-lg px-5">Save Client & Run AI Analysis</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

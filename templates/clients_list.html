@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="bi bi-people-fill"></i> Client Database</h2>
+        <p class="text-muted">Manage clients, view AI insights, and record actual policy purchases to improve the model.</p>
+    </div>
+    <div class="btn-group">
+        <a href="/clients/add" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> Add New Client
+        </a>
+        <form action="/admin/retrain" method="POST" class="d-inline ms-2">
+            <button type="submit" class="btn btn-outline-warning" onclick="return confirm('Force full model retraining? This may take a few seconds.')">
+                <i class="bi bi-arrow-repeat"></i> Retrain Model
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover table-striped align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Income</th>
+                    <th>AI Recommendation</th>
+                    <th>Actual Purchase (Truth)</th>
+                    <th>Model Ver.</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td>{{ client.client_id }}</td>
+                    <td class="fw-bold">{{ client.first_name }} {{ client.last_name }}</td>
+                    <td>{{ client.age }}</td>
+                    <td>${{ "{:,.0f}".format(client.annual_income) }}</td>
+                    
+                    <td>
+                        {% if client.recommendation %}
+                            <span class="badge bg-info text-dark">
+                                <i class="bi bi-lightbulb"></i> {{ client.recommendation }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted small">Pending...</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if client.actual_product_bought %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> {{ client.actual_product_bought }}
+                            </span>
+                            {% if client.recommendation == client.actual_product_bought %}
+                                <i class="bi bi-stars text-warning" title="AI Predicted Correctly!"></i>
+                            {% endif %}
+                        {% else %}
+                            <span class="badge bg-secondary text-light opacity-50">No Data</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-muted small">
+                        {{ client.model_version if client.model_version else 'N/A' }}
+                    </td>
+
+                    <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a href="/clients/edit/{{ client.client_id }}" class="btn btn-outline-secondary" title="Edit Info">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="/clients/buy/{{ client.client_id }}" class="btn btn-success" title="Buy Policy (Generate Ground Truth)">
+                                <i class="bi bi-cart-plus"></i> Buy Policy
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if not clients %}
+<div class="text-center py-5">
+    <h3 class="text-muted">No clients found.</h3>
+    <a href="/clients/add" class="btn btn-lg btn-primary mt-3">Add Your First Client</a>
+</div>
+{% endif %}
+
+{% endblock %}
